@@ -100,7 +100,7 @@
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:360px;margin:6px auto 0;}
   .grid .cell{aspect-ratio:1;overflow:hidden;cursor:pointer;position:relative;border-radius:2px;}
   .grid .cell .ph{position:absolute;inset:0;font-size:15px;}
-  .grid .cell.has-img{background-size:cover;background-position:center;}
+  .grid .cell.has-img{background-size:contain;background-position:center;background-repeat:no-repeat;background-color:var(--cream);}
   .grid .cell.has-img .ph{display:none;}
   .p1{--a:#eddfe6;--b:#d9b9c3;}.p2{--a:#dedede;--b:#bababa;}.p3{--a:#e2dbe6;--b:#c0b0cb;}
   .p4{--a:#dbe3e6;--b:#aec2ca;}.p5{--a:#e3e3e3;--b:#c0c0c0;}.p6{--a:#eedae0;--b:#caaeb6;}
@@ -223,7 +223,7 @@
   /* ---- lightbox / toast ---- */
   .lightbox{position:fixed;inset:0;background:rgba(20,16,16,.94);display:none;align-items:center;justify-content:center;z-index:100;flex-direction:column;}
   .lightbox.show{display:flex;}
-  .lightbox .lb-img{width:82%;max-width:360px;aspect-ratio:3/4;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Geologica','Pretendard','Helvetica Neue',Arial,sans-serif;font-optical-sizing:auto;font-variation-settings:"slnt" 0,"CRSV" 0,"SHRP" 0;font-size:22px;background-size:cover;background-position:center;}
+  .lightbox .lb-img{max-width:92vw;max-height:76vh;width:auto;height:auto;border-radius:3px;display:block;object-fit:contain;color:#fff;font-family:'Geologica','Pretendard','Helvetica Neue',Arial,sans-serif;font-optical-sizing:auto;font-variation-settings:"slnt" 0,"CRSV" 0,"SHRP" 0;font-size:22px;}
   .lightbox .lb-nav{position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-size:32px;padding:20px;cursor:pointer;opacity:.75;}
   .lb-prev{left:0;}.lb-next{right:0;}
   .lightbox .lb-close{position:absolute;top:22px;right:26px;color:#fff;font-size:26px;cursor:pointer;}
@@ -446,7 +446,7 @@
 <div class="lightbox" id="lightbox">
   <span class="lb-close" onclick="closeLB()">✕</span>
   <span class="lb-nav lb-prev" onclick="moveLB(-1)">‹</span>
-  <div class="lb-img" id="lb-img">Photo</div>
+  <img class="lb-img" id="lb-img" alt="">
   <span class="lb-nav lb-next" onclick="moveLB(1)">›</span>
   <div class="lb-count" id="lb-count">1 / 6</div>
 </div>
@@ -483,9 +483,8 @@
   }
   var lbIndex=0,lbEl=document.getElementById('lightbox'),lbImg=document.getElementById('lb-img'),lbCount=document.getElementById('lb-count');
   function renderLB(){
-    var it=galleryItems[lbIndex]||{cls:'p1'};
-    if(it.src){lbImg.style.backgroundImage='url('+it.src+')';lbImg.textContent='';}
-    else{lbImg.style.backgroundImage='';lbImg.textContent='Photo '+(lbIndex+1);}
+    var it=galleryItems[lbIndex]||{};
+    lbImg.src=it.src||'';
     lbCount.textContent=(lbIndex+1)+' / '+galleryItems.length;
   }
   function openLB(i){if(!galleryItems.length)return;lbIndex=i;renderLB();lbEl.classList.add('show');}
