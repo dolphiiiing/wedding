@@ -730,11 +730,11 @@
 </script>
 <script>
 (function(){
-  var LAT=37.5586, LNG=126.8373;
+  var PLACE='서울 강서구 공항대로36길 57 더뉴컨벤션';
   var el=document.getElementById('venueMap');
   if(!el) return;
   el.innerHTML='<iframe title="더뉴컨벤션 지도" width="100%" height="100%" style="border:0;" loading="lazy" '
-    +'src="https://www.google.com/maps?q='+LAT+','+LNG+'&z=17&output=embed"></iframe>';
+    +'src="https://www.google.com/maps?q='+encodeURIComponent(PLACE)+'&z=17&output=embed"></iframe>';
 })();
 </script>
 </body>
