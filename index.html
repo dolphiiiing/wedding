@@ -342,8 +342,8 @@
     <div class="addr">서울 강서구 공항대로36길 57 (내발산동 655-2)</div>
     <div class="map" style="margin-top:20px;"><div id="venueMap" style="width:100%;height:100%;"></div></div>
     <div class="map-btns">
-      <button class="btn map-naver" onclick="openMap('naver')">네이버지도</button>
       <button class="btn map-kakao" onclick="openMap('kakao')">카카오맵</button>
+      <button class="btn map-naver" onclick="openMap('naver')">네이버지도</button>
       <button class="btn map-google" onclick="openMap('google')">구글맵</button>
     </div>
     <div class="transit">
@@ -635,25 +635,27 @@
 </script>
 <script>
 (function(){
-  var NAVER_CLIENT_ID='YOUR_NAVER_NCP_CLIENT_ID'; /* ← 네이버클라우드플랫폼(console.ncloud.com) Maps > AI·NAVER API > Application 등록 후 발급받은 Client ID 입력 시 네이버지도로 표시 */
+  var KAKAO_APPKEY='YOUR_KAKAO_JS_KEY'; /* ← Kakao Developers의 JavaScript 키 입력 시 카카오맵으로 표시 */
   var LAT=37.5586, LNG=126.8373;
-  var NAVER_PLACE='https://map.naver.com/v5/search/'+encodeURIComponent('더뉴컨벤션');
+  var KAKAO_PLACE='https://map.kakao.com/link/map/더뉴컨벤션,'+LAT+','+LNG;
   var el=document.getElementById('venueMap');
   if(!el) return;
   function fallback(){
     var bb=(LNG-0.0035)+','+(LAT-0.0022)+','+(LNG+0.0035)+','+(LAT+0.0022);
-    el.innerHTML='<a href="'+NAVER_PLACE+'" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;position:relative;text-decoration:none;">'
+    el.innerHTML='<a href="'+KAKAO_PLACE+'" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;position:relative;text-decoration:none;">'
       +'<iframe title="더뉴컨벤션 지도" width="100%" height="100%" style="border:0;pointer-events:none;" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox='+bb+'&layer=mapnik&marker='+LAT+','+LNG+'"></iframe>'
       +'</a>';
   }
-  if(!NAVER_CLIENT_ID||NAVER_CLIENT_ID==='YOUR_NAVER_NCP_CLIENT_ID'){ fallback(); return; }
+  if(!KAKAO_APPKEY||KAKAO_APPKEY==='YOUR_KAKAO_JS_KEY'){ fallback(); return; }
   var s=document.createElement('script');
-  s.src='https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId='+NAVER_CLIENT_ID;
+  s.src='https://dapi.kakao.com/v2/maps/sdk.js?appkey='+KAKAO_APPKEY+'&autoload=false';
   s.onload=function(){
     try{
-      var pos=new naver.maps.LatLng(LAT,LNG);
-      var map=new naver.maps.Map(el,{center:pos,zoom:16});
-      new naver.maps.Marker({position:pos,map:map});
+      kakao.maps.load(function(){
+        var pos=new kakao.maps.LatLng(LAT,LNG);
+        var map=new kakao.maps.Map(el,{center:pos,level:4});
+        new kakao.maps.Marker({position:pos,map:map});
+      });
     }catch(e){ fallback(); }
   };
   s.onerror=fallback;
