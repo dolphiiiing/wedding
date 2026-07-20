@@ -543,14 +543,29 @@
   }
   function toggleVideo(){
     var v=document.getElementById('weddingVideo'),ov=document.getElementById('vplayOverlay');
-    if(v.paused){v.play();ov.classList.add('hide');}
-    else{v.pause();ov.classList.remove('hide');}
+    if(v.paused){
+      v.controls=true;
+      if(v.webkitEnterFullscreen){v.webkitEnterFullscreen();}
+      else if(v.requestFullscreen){v.requestFullscreen().catch(function(){});}
+      else if(v.webkitRequestFullscreen){v.webkitRequestFullscreen();}
+      else if(v.msRequestFullscreen){v.msRequestFullscreen();}
+      v.play();
+      ov.classList.add('hide');
+    }else{
+      v.pause();
+      ov.classList.remove('hide');
+    }
   }
   (function(){
     var v=document.getElementById('weddingVideo'),ov=document.getElementById('vplayOverlay');
     if(!v)return;
-    v.addEventListener('ended',function(){ov.classList.remove('hide');});
+    function reset(){v.controls=false;ov.classList.remove('hide');}
+    v.addEventListener('ended',reset);
     v.addEventListener('pause',function(){ov.classList.remove('hide');});
+    v.addEventListener('webkitendfullscreen',reset);
+    document.addEventListener('fullscreenchange',function(){
+      if(!document.fullscreenElement){if(v.paused)reset();}
+    });
   })();
   function addToCalendar(){
     function fmt(dt){return dt.getUTCFullYear()+String(dt.getUTCMonth()+1).padStart(2,'0')+String(dt.getUTCDate()).padStart(2,'0')+'T'+String(dt.getUTCHours()).padStart(2,'0')+String(dt.getUTCMinutes()).padStart(2,'0')+'00Z';}
