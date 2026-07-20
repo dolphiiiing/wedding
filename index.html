@@ -182,13 +182,21 @@
   .gb-form{max-width:340px;margin:24px auto 24px;display:flex;flex-direction:column;gap:10px;}
   .gb-form input,.gb-form textarea{width:100%;border:1px solid var(--line);border-radius:3px;padding:13px 14px;font-family:'Pretendard';font-size:14px;color:var(--ink);background:#fff;resize:none;outline:none;}
   .gb-form input:focus,.gb-form textarea:focus{border-color:var(--rose);}
-  .gb-list{max-width:340px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+  .gb-slider{max-width:340px;margin:0 auto;overflow:hidden;position:relative;touch-action:pan-y;}
+  .gb-track{display:flex;transition:transform .3s ease;}
+  .gb-page{flex:0 0 100%;min-width:100%;display:flex;flex-direction:column;gap:12px;box-sizing:border-box;padding:0 2px;}
   .gb-item{background:#fff;border:1px solid var(--line);border-radius:3px;padding:18px 20px;}
   .gb-from{font-family:'Geologica','Pretendard','Helvetica Neue',Arial,sans-serif;font-optical-sizing:auto;font-variation-settings:"slnt" 0,"CRSV" 0,"SHRP" 0;font-size:16px;color:var(--rose);margin-bottom:8px;}
   .gb-from b{font-family:'Pretendard',sans-serif;font-style:normal;font-weight:600;font-size:13px;color:var(--ink);letter-spacing:1px;margin-left:4px;}
   .gb-date{font-size:11px;color:var(--faint);margin-top:10px;letter-spacing:1px;}
   .gb-text{font-size:14px;color:#525252;line-height:1.8;white-space:pre-wrap;word-break:break-word;}
   .gb-empty{text-align:center;color:var(--faint);font-family:'Pretendard',sans-serif;font-size:14px;padding:24px 0;line-height:1.8;}
+  .gb-pager{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:18px;}
+  .gb-pager .gb-arrow{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--rose-d);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;user-select:none;}
+  .gb-pager .gb-arrow.disabled{opacity:.3;pointer-events:none;}
+  .gb-dots{display:flex;gap:7px;}
+  .gb-dot{width:6px;height:6px;border-radius:50%;background:var(--line);cursor:pointer;}
+  .gb-dot.active{background:var(--rose);width:16px;border-radius:3px;}
   .gb-more{display:block;margin:18px auto 0;background:#fff;border:1px solid var(--rose);color:var(--rose-d);border-radius:2px;padding:11px 30px;font-size:12px;cursor:pointer;font-family:'Pretendard';letter-spacing:2px;}
 
   /* ---- photo share ---- */
@@ -404,8 +412,14 @@
       <textarea id="gbMsg" placeholder="두 사람에게 축하와 응원의 한마디를 남겨주세요" maxlength="200" rows="3" required></textarea>
       <button type="submit" class="btn fill" style="width:100%;padding:14px;">메시지 남기기</button>
     </form>
-    <div id="gbList" class="gb-list"></div>
-    <button id="gbMore" class="gb-more" style="display:none;" onclick="window.showMoreGB()">더보기</button>
+    <div class="gb-slider" id="gbSlider">
+      <div class="gb-track" id="gbTrack"></div>
+    </div>
+    <div class="gb-pager" id="gbPager" style="display:none;">
+      <span class="gb-arrow" id="gbPrev" onclick="gbGo(gbPage-1)">‹</span>
+      <div class="gb-dots" id="gbDots"></div>
+      <span class="gb-arrow" id="gbNext" onclick="gbGo(gbPage+1)">›</span>
+    </div>
   </section>
 
   <!-- ===== PHOTO SHARE ===== -->
@@ -606,17 +620,55 @@
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const fmtDate=d=>{try{return new Intl.DateTimeFormat('ko',{month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(d);}catch(e){return '';}};
 
-  const gbForm=document.getElementById('gbForm'),gbList=document.getElementById('gbList'),gbMore=document.getElementById('gbMore');
+  const gbForm=document.getElementById('gbForm'),gbTrack=document.getElementById('gbTrack'),gbSlider=document.getElementById('gbSlider'),gbPager=document.getElementById('gbPager'),gbDots=document.getElementById('gbDots'),gbPrev=document.getElementById('gbPrev'),gbNext=document.getElementById('gbNext');
   const LS_GB='wedding_guestbook';
+  const GB_PAGE_SIZE=5;
   const localGB=()=>{try{return JSON.parse(localStorage.getItem(LS_GB)||'[]');}catch(e){return [];}};
   const saveLocalGB=a=>localStorage.setItem(LS_GB,JSON.stringify(a));
-  let gbAll=[], gbLimit=5;
+  let gbAll=[]; window.gbPage=0;
   function renderGB(){
-    if(!gbAll.length){gbList.innerHTML='<div class="gb-empty">아직 남겨진 메시지가 없어요.<br>첫 축하 메시지를 남겨주세요</div>';gbMore.style.display='none';return;}
-    gbList.innerHTML=gbAll.slice(0,gbLimit).map(it=>'<div class="gb-item"><div class="gb-from">From.<b>'+esc(it.name)+'</b></div><div class="gb-text">'+esc(it.message)+'</div><div class="gb-date">'+(it.date?fmtDate(it.date):'')+'</div></div>').join('');
-    gbMore.style.display=gbAll.length>gbLimit?'block':'none';
+    if(!gbAll.length){
+      gbTrack.style.transform='translateX(0)';
+      gbTrack.innerHTML='<div class="gb-page"><div class="gb-empty">아직 남겨진 메시지가 없어요.<br>첫 축하 메시지를 남겨주세요</div></div>';
+      gbPager.style.display='none';
+      return;
+    }
+    const totalPages=Math.ceil(gbAll.length/GB_PAGE_SIZE);
+    if(window.gbPage>totalPages-1)window.gbPage=totalPages-1;
+    if(window.gbPage<0)window.gbPage=0;
+    let pagesHtml='';
+    for(let p=0;p<totalPages;p++){
+      const items=gbAll.slice(p*GB_PAGE_SIZE,p*GB_PAGE_SIZE+GB_PAGE_SIZE);
+      pagesHtml+='<div class="gb-page">'+items.map(it=>'<div class="gb-item"><div class="gb-from">From.<b>'+esc(it.name)+'</b></div><div class="gb-text">'+esc(it.message)+'</div><div class="gb-date">'+(it.date?fmtDate(it.date):'')+'</div></div>').join('')+'</div>';
+    }
+    gbTrack.innerHTML=pagesHtml;
+    gbPager.style.display=totalPages>1?'flex':'none';
+    gbDots.innerHTML=Array.from({length:totalPages}).map((_,i)=>'<span class="gb-dot'+(i===window.gbPage?' active':'')+'" onclick="gbGo('+i+')"></span>').join('');
+    gbTrack.style.transform='translateX(-'+(window.gbPage*100)+'%)';
+    gbPrev.classList.toggle('disabled',window.gbPage===0);
+    gbNext.classList.toggle('disabled',window.gbPage===totalPages-1);
   }
-  window.showMoreGB=function(){gbLimit+=5;renderGB();};
+  window.gbGo=function(p){
+    const totalPages=Math.ceil(gbAll.length/GB_PAGE_SIZE);
+    if(p<0||p>totalPages-1)return;
+    window.gbPage=p;
+    renderGB();
+  };
+  (function(){
+    let startX=0,startY=0,dragging=false;
+    gbSlider.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;startY=e.touches[0].clientY;dragging=true;},{passive:true});
+    gbSlider.addEventListener('touchmove',e=>{
+      if(!dragging)return;
+      const dx=e.touches[0].clientX-startX,dy=e.touches[0].clientY-startY;
+      if(Math.abs(dx)>Math.abs(dy))e.preventDefault();
+    },{passive:false});
+    gbSlider.addEventListener('touchend',e=>{
+      if(!dragging)return;dragging=false;
+      const dx=e.changedTouches[0].clientX-startX;
+      if(Math.abs(dx)<40)return;
+      if(dx<0)window.gbGo(window.gbPage+1);else window.gbGo(window.gbPage-1);
+    });
+  })();
   if(READY){
     const q=x.query(x.collection(FS,'guestbook'),x.orderBy('createdAt','desc'));
     x.onSnapshot(q,snap=>{gbAll=[];snap.forEach(doc=>{const d=doc.data();gbAll.push({name:d.name,message:d.message,date:d.createdAt&&d.createdAt.toDate?d.createdAt.toDate():null});});renderGB();},err=>{console.error(err);renderGB();});
@@ -628,7 +680,7 @@
     const btn=gbForm.querySelector('button');btn.disabled=true;
     try{
       if(READY){await x.addDoc(x.collection(FS,'guestbook'),{name,message:msg,createdAt:x.serverTimestamp()});}
-      else{const a=localGB();a.unshift({name,message:msg,date:Date.now()});saveLocalGB(a);gbAll=a.map(v=>({name:v.name,message:v.message,date:new Date(v.date)}));renderGB();}
+      else{const a=localGB();a.unshift({name,message:msg,date:Date.now()});saveLocalGB(a);gbAll=a.map(v=>({name:v.name,message:v.message,date:new Date(v.date)}));window.gbPage=0;renderGB();}
       gbForm.reset();window.showToast&&window.showToast('축하 메시지가 등록되었어요');
     }catch(err){alert('등록 중 오류가 발생했어요: '+err.message);}
     btn.disabled=false;
