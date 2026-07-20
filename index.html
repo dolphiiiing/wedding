@@ -636,7 +636,7 @@
 
   const photoInput=document.getElementById('photoInput'),hint=document.getElementById('uploadHint');
   /* ▼ 구글드라이브 업로드: Apps Script 웹앱 배포 URL을 넣으면 하객 사진이 내 드라이브 폴더에 저장됩니다 */
-  const DRIVE_ENDPOINT='';
+  const DRIVE_ENDPOINT='https://script.google.com/macros/s/AKfycbwFtmDWX5ypoZYFA1-qZoPu-iKZNzJph68pBy5wnzgMf0hhGYyoobWbUgapPf1RLNxnpQ/exec';
   const LS_PH='wedding_photos';
   const localPhotos=()=>{try{return JSON.parse(localStorage.getItem(LS_PH)||'[]');}catch(e){return [];}};
   const saveLocalPhotos=a=>localStorage.setItem(LS_PH,JSON.stringify(a));
