@@ -368,9 +368,9 @@
     <div class="addr">서울 강서구 공항대로36길 57 (내발산동 655-2)</div>
     <div class="map" style="margin-top:20px;"><div id="venueMap" style="width:100%;height:100%;"></div></div>
     <div class="map-btns">
+      <button class="btn map-google" onclick="openMap('google')">구글맵</button>
       <button class="btn map-naver" onclick="openMap('naver')">네이버지도</button>
       <button class="btn map-kakao" onclick="openMap('kakao')">카카오맵</button>
-      <button class="btn map-google" onclick="openMap('google')">구글맵</button>
     </div>
     <div class="transit">
       <div class="t"><div class="h">🚃 지하철</div><div class="b">5호선 발산역 7번 출구 하차, 도보 약 3분</div></div>
@@ -730,29 +730,11 @@
 </script>
 <script>
 (function(){
-  var NAVER_CLIENT_ID='vunw4pwygs'; /* 네이버클라우드플랫폼 Maps Application Client ID */
   var LAT=37.5586, LNG=126.8373;
-  var NAVER_PLACE='https://map.naver.com/v5/search/'+encodeURIComponent('더뉴컨벤션');
   var el=document.getElementById('venueMap');
   if(!el) return;
-  function fallback(){
-    var bb=(LNG-0.0035)+','+(LAT-0.0022)+','+(LNG+0.0035)+','+(LAT+0.0022);
-    el.innerHTML='<a href="'+NAVER_PLACE+'" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;position:relative;text-decoration:none;">'
-      +'<iframe title="더뉴컨벤션 지도" width="100%" height="100%" style="border:0;pointer-events:none;" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox='+bb+'&layer=mapnik&marker='+LAT+','+LNG+'"></iframe>'
-      +'</a>';
-  }
-  if(!NAVER_CLIENT_ID||NAVER_CLIENT_ID==='YOUR_NAVER_NCP_CLIENT_ID'){ fallback(); return; }
-  var s=document.createElement('script');
-  s.src='https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId='+NAVER_CLIENT_ID;
-  s.onload=function(){
-    try{
-      var pos=new naver.maps.LatLng(LAT,LNG);
-      var map=new naver.maps.Map(el,{center:pos,zoom:16});
-      new naver.maps.Marker({position:pos,map:map});
-    }catch(e){ fallback(); }
-  };
-  s.onerror=fallback;
-  document.head.appendChild(s);
+  el.innerHTML='<iframe title="더뉴컨벤션 지도" width="100%" height="100%" style="border:0;" loading="lazy" '
+    +'src="https://www.google.com/maps?q='+LAT+','+LNG+'&z=17&output=embed"></iframe>';
 })();
 </script>
 </body>
