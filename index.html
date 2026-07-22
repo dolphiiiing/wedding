@@ -169,7 +169,7 @@
   .acc-head .arw{color:var(--rose);transition:transform .25s;font-size:11px;}
   .acc.open .acc-head .arw{transform:rotate(180deg);}
   .acc-body{max-height:0;overflow:hidden;transition:max-height .3s ease;}
-  .acc.open .acc-body{max-height:200px;}
+  .acc.open .acc-body{max-height:400px;}
   .acc-item{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid var(--line);}
   .acc-item .bank{font-size:13px;color:var(--ink);}
   .acc-item .no{font-size:12px;color:var(--soft);margin-top:2px;letter-spacing:.5px;}
@@ -387,10 +387,20 @@
     <p class="acc-intro">참석이 어려우신 분들을 위해 조심스럽게 안내드립니다.<br>전해주시는 따뜻한 마음, 감사히 간직하겠습니다.</p>
     <div class="acc" id="acc1">
       <div class="acc-head" onclick="toggleAcc('acc1')"><span class="side">신랑 측 계좌번호</span><span class="arw">▼</span></div>
-      <div class="acc-body"><div class="acc-item">
-        <div><div class="bank">기업은행</div><div class="no">241-107851-01-017</div><div class="ho">예금주 이하석</div></div>
-        <button class="copy-btn" onclick="copyText('기업은행 241-107851-01-017 이하석',this)">COPY</button>
-      </div></div>
+      <div class="acc-body">
+        <div class="acc-item">
+          <div><div class="bank">기업은행</div><div class="no">241-107851-01-017</div><div class="ho">예금주 이하석</div></div>
+          <button class="copy-btn" onclick="copyText('기업은행 241-107851-01-017 이하석',this)">COPY</button>
+        </div>
+        <div class="acc-item">
+          <div><div class="bank">국민은행</div><div class="no">667-21-0058-505</div><div class="ho">예금주 이용재 (신랑 아버지)</div></div>
+          <button class="copy-btn" onclick="copyText('국민은행 667-21-0058-505 이용재',this)">COPY</button>
+        </div>
+        <div class="acc-item">
+          <div><div class="bank">기업은행</div><div class="no">009-044576-02-016</div><div class="ho">예금주 정희정 (신랑 어머니)</div></div>
+          <button class="copy-btn" onclick="copyText('기업은행 009-044576-02-016 정희정',this)">COPY</button>
+        </div>
+      </div>
     </div>
     <div class="acc" id="acc2">
       <div class="acc-head" onclick="toggleAcc('acc2')"><span class="side">신부 측 계좌번호</span><span class="arw">▼</span></div>
