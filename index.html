@@ -169,30 +169,32 @@
   .pk-fee .v b{color:var(--rose-d);font-weight:700;}
 
   /* ---- 만차 시 이대서울병원 주차 안내 카드 ---- */
-  .pk{margin-top:16px;background:var(--pink-bg);border:1px solid var(--blush);border-radius:10px;padding:20px 14px 16px;word-break:keep-all;}
-  .pk-head{text-align:center;}
-  .pk-mark{width:26px;height:26px;margin:0 auto 8px;border:1.5px solid var(--rose-d);border-radius:50%;color:var(--rose-d);font-weight:700;font-size:14px;line-height:23px;}
-  .pk-sub{font-size:12px;color:var(--rose-d);font-weight:600;letter-spacing:1px;}
-  .pk-title{font-size:16px;font-weight:700;color:var(--ink);margin-top:2px;letter-spacing:0;line-height:1.5;}
-  .pk-bar{width:28px;height:2px;background:var(--rose);opacity:.6;margin:10px auto 12px;}
-  .pk-lead{font-size:12.5px;color:#626262;line-height:1.8;text-align:center;}
+  .pk{margin-top:14px;word-break:keep-all;}
+  .pk-toggle{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 14px;background:var(--pink-bg);border:1px solid var(--blush);border-radius:8px;cursor:pointer;user-select:none;-webkit-user-select:none;}
+  .pk-toggle .t1{font-size:13px;font-weight:700;color:var(--rose-d);}
+  .pk-toggle .arw{color:var(--rose);font-size:11px;transition:transform .25s;}
+  .pk.open .pk-toggle .arw{transform:rotate(180deg);}
+  .pk-body{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+  .pk.open .pk-body{max-height:1600px;}
+  .pk-inner{padding:16px 2px 4px;}
+  .pk-lead{font-size:12.5px;color:#626262;line-height:1.8;}
   .pk-lead b,.pk-steps .d b{color:var(--rose-d);font-weight:600;}
-  .pk-steps{list-style:none;margin:14px 0 0;padding:0;background:#fff;border:1px solid var(--line);border-radius:8px;}
-  .pk-steps li{display:flex;gap:12px;padding:14px;border-top:1px solid var(--line);}
+  .pk-steps{list-style:none;margin:10px 0 0;padding:0;}
+  .pk-steps li{display:flex;gap:12px;padding:14px 2px;border-top:1px solid var(--line);}
   .pk-steps li:first-child{border-top:none;}
   .pk-steps .n{flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:var(--rose);color:#fff;font-size:12px;font-weight:600;text-align:center;line-height:22px;margin-top:1px;}
   .pk-steps .h{font-size:13.5px;font-weight:700;color:var(--ink);}
   .pk-steps .d{font-size:12.5px;color:#626262;line-height:1.75;margin-top:2px;}
   .pk-steps .d .ar{display:block;color:var(--rose);line-height:1.4;}
-  .pk-flow{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
-  .pk-flow-h{background:var(--rose-d);color:#fff;font-size:12.5px;font-weight:600;text-align:center;padding:9px 8px;}
-  .pk-flow-b{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 6px 12px;}
+  .pk-flow{margin-top:6px;padding-top:16px;border-top:1px solid var(--line);}
+  .pk-flow-h{font-size:12.5px;font-weight:700;color:var(--rose-d);text-align:center;}
+  .pk-flow-b{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 0 6px;}
   .pk-flow-b .s{flex:1;text-align:center;min-width:0;}
   .pk-flow-b .dot{width:28px;height:28px;margin:0 auto 6px;border-radius:50%;background:var(--pink-bg);border:1px solid var(--blush);color:var(--rose-d);font-size:12px;font-weight:700;line-height:26px;}
   .pk-flow-b .l{font-size:11.5px;font-weight:700;color:var(--ink);line-height:1.4;}
   .pk-flow-b .u{font-size:10.5px;color:var(--soft);line-height:1.4;margin-top:2px;}
   .pk-flow-b .a{flex:0 0 12px;color:var(--rose);font-size:14px;padding-top:4px;text-align:center;}
-  .pk-note{margin-top:12px;text-align:center;font-size:12.5px;font-weight:500;color:var(--rose-d);}
+  .pk-note{margin-top:14px;padding:10px 8px;background:var(--pink-bg);border-radius:6px;text-align:center;font-size:12.5px;font-weight:500;color:var(--rose-d);}
 
   /* ---- account ---- */
   .account{background:var(--cream);}
@@ -416,13 +418,9 @@
           <div class="r"><span class="k">더뉴컨벤션 주차장</span><span class="v"><b>2시간 무료</b><br>30분(기본) 3,000원<br>이후 10분당 1,000원</span></div>
           <div class="r"><span class="k">이대서울병원 주차장</span><span class="v"><b>2시간 무료</b><br>30분(기본) 3,000원<br>이후 10분당 1,000원</span></div>
         </div>
-        <div class="pk">
-          <div class="pk-head">
-            <div class="pk-mark">!</div>
-            <div class="pk-sub">만차 시</div>
-            <div class="pk-title">이대서울병원 주차장 이용 안내</div>
-          </div>
-          <div class="pk-bar"></div>
+        <div class="pk" id="pkAcc">
+          <div class="pk-toggle" onclick="toggleAcc('pkAcc')"><span class="t1">만차 시 이대서울병원 주차장 이용 안내</span><span class="arw">▼</span></div>
+          <div class="pk-body"><div class="pk-inner">
           <p class="pk-lead">본 건물 주차장이 만차일 경우,<br>근처 <b>이대서울병원 주차장</b>을 이용해 주세요.<br>아래 주의사항을 <b>꼭 확인</b> 부탁드립니다.</p>
           <ol class="pk-steps">
             <li><span class="n">1</span><div><div class="h">이대서울병원 주차</div><div class="d">건물 주차장 만차 시,<br>주차 안내원의 안내에 따라<br>이대서울병원 주차장을 이용해 주세요.</div></div></li>
@@ -442,6 +440,7 @@
             </div>
           </div>
           <div class="pk-note">혼잡할 수 있으니 여유 있게 도착해 주세요</div>
+          </div></div>
         </div></div>
     </div>
   </section>
