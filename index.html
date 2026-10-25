@@ -160,6 +160,14 @@
   .transit .t .h{font-family:'Pretendard',sans-serif;font-weight:600;font-size:13px;color:var(--rose-d);letter-spacing:1px;margin-bottom:4px;}
   .transit .t .b{font-size:13px;color:#626262;line-height:1.8;}
 
+  /* ---- 주차 요금 ---- */
+  .pk-fee{margin-top:12px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;}
+  .pk-fee .r{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:12px 14px;border-top:1px solid var(--line);}
+  .pk-fee .r:first-child{border-top:none;}
+  .pk-fee .k{font-size:13px;font-weight:700;color:var(--ink);word-break:keep-all;}
+  .pk-fee .v{font-size:12.5px;color:#626262;line-height:1.7;text-align:right;white-space:nowrap;}
+  .pk-fee .v b{color:var(--rose-d);font-weight:700;}
+
   /* ---- 만차 시 이대서울병원 주차 안내 카드 ---- */
   .pk{margin-top:16px;background:var(--pink-bg);border:1px solid var(--blush);border-radius:10px;padding:20px 14px 16px;word-break:keep-all;}
   .pk-head{text-align:center;}
@@ -402,11 +410,12 @@
       <div class="t"><div class="h">🚃 지하철</div><div class="b">5호선 발산역 7번 출구 하차, 도보 약 3분</div></div>
       <div class="t"><div class="h">🚌 버스</div><div class="b">발산역 정류장 하차 후 도보 이동</div></div>
       <div class="t"><div class="h">🚗 자가용 · 주차</div><div class="b">내비게이션 ‘더뉴컨벤션’ 검색 · 건물 내 주차장 이용<br>
-        · 주차 2시간 무료<br>
         · 웨딩홀 주차: 지하 1층 ~ 지하 4층<br>
-        · 만차 시, 이대 서울병원 주차장 이용<br>
-        &nbsp;&nbsp;- 주차 등록 필수: 이대 서울병원 주차 안내원이 주는 주차권을 반드시 지참하신 뒤, 컨벤션 직원에게 제출하셔야 정산이 가능합니다. (웨딩홀 1층 예약실 옆 위치)<br>
-        &nbsp;&nbsp;- 1층 응급의료센터 방향(남문) 출구로 나오시면 식장으로 바로 연결됩니다.</div>
+        · 만차 시, 이대서울병원 주차장 이용 (아래 안내 참고)</div>
+        <div class="pk-fee">
+          <div class="r"><span class="k">더뉴컨벤션 주차장</span><span class="v"><b>2시간 무료</b><br>30분(기본) 3,000원<br>이후 10분당 1,000원</span></div>
+          <div class="r"><span class="k">이대서울병원 주차장</span><span class="v"><b>2시간 무료</b><br>30분(기본) 3,000원<br>이후 10분당 1,000원</span></div>
+        </div>
         <div class="pk">
           <div class="pk-head">
             <div class="pk-mark">!</div>
@@ -417,7 +426,7 @@
           <p class="pk-lead">본 건물 주차장이 만차일 경우,<br>근처 <b>이대서울병원 주차장</b>을 이용해 주세요.<br>아래 주의사항을 <b>꼭 확인</b> 부탁드립니다.</p>
           <ol class="pk-steps">
             <li><span class="n">1</span><div><div class="h">이대서울병원 주차</div><div class="d">건물 주차장 만차 시,<br>주차 안내원의 안내에 따라<br>이대서울병원 주차장을 이용해 주세요.</div></div></li>
-            <li><span class="n">2</span><div><div class="h">식장 오시는 길</div><div class="d">이대서울병원 <b>C관</b> 병동 안내 유도선을 따라<br>주차 후 <b>C관 엘리베이터</b>를 이용해 주세요.<span class="ar">↓</span><b>1층 남문 방향 출구</b>로 나오셔서<br>식장으로 이동해 주세요.</div></div></li>
+            <li><span class="n">2</span><div><div class="h">식장 오시는 길</div><div class="d">이대서울병원 <b>C관</b> 병동 안내 유도선을 따라<br>주차 후 <b>C관 엘리베이터</b>를 이용해 주세요.<span class="ar">↓</span><b>1층 남문(응급의료센터 방향) 출구</b>로 나오셔서<br>식장으로 이동해 주세요.</div></div></li>
             <li><span class="n">3</span><div><div class="h">셀프 주차 등록 안내</div><div class="d">이대서울병원 주차 시,<br><b>1층 · 2층 · 5층</b>에 비치된 태블릿으로<br>셀프 주차 등록 후 출차해 주세요.</div></div></li>
           </ol>
           <div class="pk-flow">
